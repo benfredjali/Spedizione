@@ -197,7 +197,6 @@ class BtrHelper
         $pdf->loadHTML('<h1>Test</h1>');
        //Storage::put('public/pdf/invoice.pdf', $pdf->output());
         return $pdf->stream();
-
        //return $pdf->download('invoice.pdf');
 
     }
