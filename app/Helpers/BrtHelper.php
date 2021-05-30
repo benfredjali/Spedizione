@@ -2,6 +2,9 @@
     use GuzzleHttp\Client;
     use App\Models\Spedizione;
     use App\Models\User;
+    use Barryvdh\DomPDF\PDF;
+    //use Illuminate\Support\Facades\Storage;
+    //use Barryvdh\DomPDF\Facade as PDF;
 
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Http\Request;
@@ -10,8 +13,8 @@
     use DB;
     use App;
     use \GuzzleHttp\Middleware;
-    use Illuminate\Support\Facades\Storage;
     use LynX39\LaraPdfMerger\Facades\PdfMerger;
+    use Barryvdh\DomPDF\Facade as PDF;
 
 
 
@@ -192,7 +195,7 @@ class BtrHelper
         $pdf = App::make('dompdf.wrapper');
 
         $pdf->loadHTML('<h1>Test</h1>');
-       Storage::put('public/pdf/invoice.pdf', $pdf->output());
+       //Storage::put('public/pdf/invoice.pdf', $pdf->output());
         return $pdf->stream();
 
        //return $pdf->download('invoice.pdf');

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db70f6c8ef1ff732b4b494b2fb7145e5",
+    "content-hash": "4f30b460e01985924311798bd960e7d5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -183,6 +183,76 @@
                 }
             ],
             "time": "2021-01-20T22:51:39+00:00"
+        },
+        {
+            "name": "daltcore/lara-pdf-merger",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DALTCORE/lara-pdf-merger.git",
+                "reference": "f794509b12fe61c9d6a6af9d3af52ffecddc90cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DALTCORE/lara-pdf-merger/zipball/f794509b12fe61c9d6a6af9d3af52ffecddc90cf",
+                "reference": "f794509b12fe61c9d6a6af9d3af52ffecddc90cf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LynX39\\LaraPdfMerger\\PdfMergerServiceProvider"
+                    ],
+                    "aliases": {
+                        "PdfMerger": "LynX39\\LaraPdfMerger\\Facades\\PdfMerger"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "LynX39\\LaraPdfMerger": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Musso",
+                    "email": "lynx@deltaaskii.com",
+                    "homepage": "https://github.com/LynX39"
+                },
+                {
+                    "name": "Ramon Smit",
+                    "email": "rsmit@daltcore.com",
+                    "homepage": "https://github.com/daltcore"
+                },
+                {
+                    "name": "Marouan Sami",
+                    "email": "sami.marwen.isetcom@gmail.com",
+                    "homepage": "https://github.com/MarwenSami"
+                }
+            ],
+            "homepage": "https://github.com/MarwenSami/lara-pdf-merger",
+            "keywords": [
+                "duplex merge",
+                "laravel",
+                "manage",
+                "merge",
+                "merger",
+                "paginate",
+                "pdf"
+            ],
+            "support": {
+                "issues": "https://github.com/DALTCORE/lara-pdf-merger/issues",
+                "source": "https://github.com/DALTCORE/lara-pdf-merger/tree/2.0"
+            },
+            "time": "2020-05-06T07:49:12+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -1481,55 +1551,6 @@
                 }
             ],
             "time": "2021-01-18T20:58:21+00:00"
-        },
-        {
-            "name": "lynx39/lara-pdf-merger",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/deltaaskii/lara-pdf-merger.git",
-                "reference": "fcff464d5fc0a0c3a42c552654959680c911e4fc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/deltaaskii/lara-pdf-merger/zipball/fcff464d5fc0a0c3a42c552654959680c911e4fc",
-                "reference": "fcff464d5fc0a0c3a42c552654959680c911e4fc",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "LynX39\\LaraPdfMerger": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Musso",
-                    "email": "lynx@deltaaskii.com",
-                    "homepage": "https://github.com/LynX39"
-                }
-            ],
-            "homepage": "https://github.com/LynX39/lara-pdf-merger",
-            "keywords": [
-                "laravel",
-                "manage",
-                "merge",
-                "merger",
-                "paginate",
-                "pdf"
-            ],
-            "support": {
-                "issues": "https://github.com/deltaaskii/lara-pdf-merger/issues",
-                "source": "https://github.com/deltaaskii/lara-pdf-merger/tree/master"
-            },
-            "time": "2017-11-17T14:13:58+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -7655,7 +7676,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^8.0"
+        "php": "^7.1.3"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
