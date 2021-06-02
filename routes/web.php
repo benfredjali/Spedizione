@@ -21,7 +21,11 @@ Route::get('/', function () {
 
 Route::get('addShipment', [BtrHelper::class, 'addShipment']);
 
-Route::get('getShipment', [BtrHelper::class, 'getShipment']);
-
 Route::get('pdf', [BtrHelper::class, 'ShipmentPDF']);
+
+Route::get('getShipment/{parcelID}', [BtrHelper::class, 'getShipment']);
+
+
+Route::get('delete/{numeric}/{alphanumeric}', [BtrHelper::class, 'DeleteShipment']);
+
 

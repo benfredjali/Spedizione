@@ -1,8 +1,10 @@
 <?php
+    use Dompdf\Dompdf ;
     use GuzzleHttp\Client;
     use App\Models\Spedizione;
     use App\Models\User;
     use Barryvdh\DomPDF\PDF;
+    use Illuminate\Support\Facades\Storage;
     //use Illuminate\Support\Facades\Storage;
     //use Barryvdh\DomPDF\Facade as PDF;
 
@@ -15,12 +17,14 @@
     use \GuzzleHttp\Middleware;
     use LynX39\LaraPdfMerger\Facades\PdfMerger;
     use Barryvdh\DomPDF\Facade as PDF;
-
+    use Storage;
+    use App\Helpers\BtrHelper AS BtrHelpers;
 
 
 class BtrHelper
 {
-    static public  function addShipment($shipping_details=null)
+    
+     public static function addShipment()
     {
         // Create a client with curl request
         $client = new \GuzzleHttp\Client(['verify' => false]);
@@ -88,8 +92,8 @@ class BtrHelper
                         "packingListPDFName" =>  "",
                         "packingListPDFFlagPrint" =>  "",
                         "packingListPDFFlagEmail" =>  "",
-                        "numericSenderReference" =>  2,
-                        "alphanumericSenderReference" =>  "aaa1",
+                        "numericSenderReference" =>  47,
+                        "alphanumericSenderReference" =>  "aaa2",
                         "numberOfParcels" => 1,
                         "weightKG" =>  81.0,
                         "volumeM3" =>  0.451,
@@ -103,7 +107,7 @@ class BtrHelper
 
                   "labelParameters" =>  [
 
-                        "outputType" =>  "ZPL",
+                        "outputType" =>  "PDF",
                         "offsetX" =>  0,
                         "offsetY" =>  0,
                         "isBorderRequired" =>  "N",
@@ -114,91 +118,95 @@ class BtrHelper
           
         ]);
    
-            $data = $response->getBody()->getContents();
-            $data = json_decode($data);
-            $shipping_details = $data;
-            //echo"<pre>";print_r($shipping_details);echo"</pre>";
-            dd($data);
+            $shimpent_data = $response->getBody()->getContents();
+            $shimpent_data = json_decode($shimpent_data);
+            $shipment = $shimpent_data;
+            //BtrHelpers::getShipment($shipment);
+            
+            $shipment =  BtrHelpers::ShipmentPDF($shimpent_data);
+            
+            dd($shimpent_data);
 
  }
 
-   public  function getShipment()
+   public static function ShipmentPDF($shipment)
     {
-
-
-//    $client = new \GuzzleHttp\Client([
-//     // Base URI is used with relative requests
-//     //'base_uri' => 'https://reqres.in',
-//     ]);
-  
-//     $response = $client->request('GET', '/api/users', [
-//     'query' => [
-//     'page' => '2',
-//     ]
-//     ]);
- 
-// //get status code using $response->getStatusCode();
- 
-//     $body = $response->getBody();
-//     $arr_body = json_decode($body);
-//     print_r($arr_body);
-//     }
-        
-
-       $client = new \GuzzleHttp\Client(['verify' => false]);
-        $request = $client->get('http://httpbin.org');
-        $response = $request->getBody()->getContents();
-        echo '<pre>';
-        print_r($response);
-}
-
-
-   public static function ShipmentPDF()
-    {
-
-      /*  //merger for returned pdf files
+            //$shipment = BrtHelper::addShipping($shipment);
             $pdfMerger = PDFMerger::init();
-
             $single_files = [];
-
-            $shipment = BtrHelper::addShipment();
-            //cast response to object
-            $response = $shipment;
-
-            $response = base64_decode($response->scalar);
-            
-            if (!file_exists(storage_path("app/tmp/"))) {
-                mkdir(storage_path("app/tmp/"), 0775, true);
-            }
-
-            $temp = storage_path("app/tmp/".$i.time().".pdf");
-
-            //save labels list to allow deletion after merging
+            //dd($shipment);
+            foreach($shipment->createResponse->labels as $key => $label){
+            foreach($label as $labelstream){
+            $label = base64_decode($labelstream->stream);
+    }
+            $temp = public_path("app/tmp/".$key.time().".pdf");
+            file_put_contents($temp,$label);
             $single_files[] = $temp;
-            file_put_contents($temp,$response);
+            $pdfMerger->addPDF($temp, 'all'); 
+            //merge single files
+            $pdfMerger->merge(); 
+            //remove single files
+            foreach($single_files as $file) unlink($file);        
+            return $pdfMerger->save('Etichetta_ordine_.pdf','download');
+ 
+    
+    }
 
-            $pdfMerger->addPDF($temp, 'all');
-        
-
-        //merge single files
-        // $pdfMerger->merge();   
-        
-        //remove single files
-        foreach($single_files as $file) unlink($file);
-        
-        $pdfMerger->save('Etichetta_ordine_.pdf','download');*/
-
-        $pdfMerger = PDFMerger::init();
-
-        $single_files = [];
-
-        $pdf = App::make('dompdf.wrapper');
-
-        $pdf->loadHTML('<h1>Test</h1>');
-       //Storage::put('public/pdf/invoice.pdf', $pdf->output());
-        return $pdf->stream();
-       //return $pdf->download('invoice.pdf');
 
     }
+
+
+    
+    public static function getShipment($parcelID)
+    {
+            
+        $client = new \GuzzleHttp\Client(['verify' => false]);
+        
+        $url = 'https://api.brt.it/rest/v1/tracking/parcelID/'.$parcelID;
+        
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'userID' => '1020118',
+                'password' => 'brt1404txt'
+            ]                                  
+        ]);
+
+        $shimpent_data = $response->getBody()->getContents();
+            //dd ($shiment_data);
+
+        dd(json_decode($shimpent_data));
+    }
+
+
+    
+    public static function DeleteShipment($numeric, $alphanumeric)
+    {
+        
+         $client = new \GuzzleHttp\Client(['verify' => false]);
+
+            //dd ($shiment_data);
+            $response = $client->request('PUT', 'https://api.brt.it/rest/v1/shipments/delete', [
+                \GuzzleHttp\RequestOptions::JSON => [
+                    'account' => [
+                            'userID' => '1020118',
+                            'password' => 'brt1404txt'
+                    ],
+                    'deleteData' => [
+                        "senderCustomerCode" => 1020118,
+                        "numericSenderReference" => $numeric,
+                        "alphanumericSenderReference" => $alphanumeric
+                    ]
+                ]                                        
+            ]);
+
+            $shimpent_data = $response->getBody()->getContents();
+
+            dd(json_decode($shimpent_data));
+
+
+
+
+    }
+
 
 }
