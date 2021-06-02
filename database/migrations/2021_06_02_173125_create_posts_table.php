@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSpedizionisTable extends Migration
+class CreatePostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,9 @@ class CreateSpedizionisTable extends Migration
      */
     public function up()
     {
-        Schema::create('spedizionis', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->id();
-             $table->string('costumer');
-            $table->string('adresse');
-            $table->string('data_nascita');
-
-            $table->string('spedizione_data');
-            $table->string('servizio');
-            $table->string('porto');
+            $table->string('title');
             $table->timestamps();
         });
     }
@@ -33,6 +27,6 @@ class CreateSpedizionisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('spedizionis');
+        Schema::dropIfExists('posts');
     }
 }

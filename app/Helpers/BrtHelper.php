@@ -92,7 +92,7 @@ class BtrHelper
                         "packingListPDFName" =>  "",
                         "packingListPDFFlagPrint" =>  "",
                         "packingListPDFFlagEmail" =>  "",
-                        "numericSenderReference" =>  47,
+                        "numericSenderReference" =>  51,
                         "alphanumericSenderReference" =>  "aaa2",
                         "numberOfParcels" => 1,
                         "weightKG" =>  81.0,
@@ -123,7 +123,7 @@ class BtrHelper
             $shipment = $shimpent_data;
             //BtrHelpers::getShipment($shipment);
             
-            $shipment =  BtrHelpers::ShipmentPDF($shimpent_data);
+            //$shipment =  BtrHelpers::ShipmentPDF($shimpent_data);
             
             dd($shimpent_data);
 

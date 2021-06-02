@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DB;
 use App\Models\Spedizione;
 use Illuminate\Http\Request;
+//use App\Models\Spedizione;
 
 class SpedizioneController extends Controller
 {
@@ -14,7 +15,16 @@ class SpedizioneController extends Controller
      */
     public function index()
     {
-        //
+        //$spedizione = DB::table('spediziones')->get();
+        //->orderBy('nome', 'desc')
+        //->orderBy('created_at', 'desc')
+        //->groupBy('count')
+        //->having('count', '>', 100)
+        //->get();
+
+        $spediziones = Spedizione::all();
+
+        return view('spediziones.index',compact('spediziones'));
     }
 
     /**
@@ -24,7 +34,7 @@ class SpedizioneController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -35,7 +45,30 @@ class SpedizioneController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = array();
+        $data['senderCustomerCode'] = $request->senderCustomerCode;
+        $data['numericSenderReference'] = $request->numericSenderReference;
+
+        $data['alphanumericSenderReference'] = $request->alphanumericSenderReference;
+
+        $data['parcelID'] = $request->parcelID;
+
+        $data['etichetta'] = $request->etichetta;
+
+
+        $spedizione = DB::table('spediziones')->insert($data);
+    
+         
+        return redirect()->route('spediziones.index')
+                        ->with('success','Shipment created successfully.');
+    }
+
+    
+    public function get(Request $request)
+    {
+        $data = Post::all();
+        return redirect()->route('spediziones.index')
+                        ->with('success','Shipment created successfully.');
     }
 
     /**

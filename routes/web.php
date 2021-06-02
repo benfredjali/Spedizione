@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Helpers\BtrHelper;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\SpedizioneController;
+use App\Http\Controllers\GuzzleController;
+use App\Http\Controllers\PostController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +33,13 @@ Route::get('getShipment/{parcelID}', [BtrHelper::class, 'getShipment']);
 
 Route::get('delete/{numeric}/{alphanumeric}', [BtrHelper::class, 'DeleteShipment']);
 
+Route::resource('spediziones', SpedizioneController::class);
 
+//***test
+
+
+
+
+
+//Route::post('store', [SpedizioneController::class, 'store']);
+//Route::get('get', [PostController::class, 'get']);  
