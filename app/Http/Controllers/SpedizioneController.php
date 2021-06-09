@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use DB;
 use App\Models\Spedizione;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use App\Helpers\BtrHelper;
+use Illuminate\Http\Client\Response;
 //use App\Models\Spedizione;
 
 class SpedizioneController extends Controller
@@ -45,28 +48,47 @@ class SpedizioneController extends Controller
      */
     public function store(Request $request)
     {
-        $data = array();
-        $data['senderCustomerCode'] = $request->senderCustomerCode;
-        $data['numericSenderReference'] = $request->numericSenderReference;
+        $spedizione = array();
+        $data = BtrHelper::addShipment();
+        $Filename= BtrHelper::getFilename();
 
-        $data['alphanumericSenderReference'] = $request->alphanumericSenderReference;
+        //dd($data);
+        foreach($data->createResponse->labels as $key => $label){
+            //$numericSenderReference = $data->createResponse->numericSenderReference;
 
-        $data['parcelID'] = $request->parcelID;
+            $alphanumericSenderReference = $data->createResponse->alphanumericSenderReference ;
+       
+            foreach($label as $labelstream){
+            $label = $labelstream->parcelID ;
+           
+            $spedizione['parcelID']= $label;
+        }
+        //$data->numericSenderReference = $request->get('numericSenderReference');
+        //$data->alphanumericSenderReference = $request->get('alphanumericSenderReference');
+        $numericSenderReference =  BtrHelper::datasender();
+        $spedizione['numericSenderReference'] = $numericSenderReference;
+        $spedizione['alphanumericSenderReference'] = $alphanumericSenderReference;
+        $spedizione['etichetta'] =  $Filename ;
 
-        $data['etichetta'] = $request->etichetta;
-
-
-        $spedizione = DB::table('spediziones')->insert($data);
-    
+        //$data->numericSenderReference = $numericSenderReference;
+        //dd($data);
+        //$data->etichetta = "dfs"  ;
+    }
+       //$spedizione = DB::table('spediziones')->insert($spedizione);
+       $articolo = DB::table('spediziones')->insert($spedizione);
+       //Spedizione::create($spedizione->all());
+       //dd($data);
          
         return redirect()->route('spediziones.index')
                         ->with('success','Shipment created successfully.');
+
+    
     }
 
     
     public function get(Request $request)
     {
-        $data = Post::all();
+        $data = Spedizione::all();
         return redirect()->route('spediziones.index')
                         ->with('success','Shipment created successfully.');
     }
@@ -77,9 +99,13 @@ class SpedizioneController extends Controller
      * @param  \App\Models\Spedizione  $spedizione
      * @return \Illuminate\Http\Response
      */
-    public function show(Spedizione $spedizione)
+    public function show(Request $request)
     {
-        //
+       /* $spedizione = array();
+        $data = BtrHelper::getShipment();
+        dd($data);*/
+       
+echo "ali";
     }
 
     /**
@@ -113,6 +139,19 @@ class SpedizioneController extends Controller
      */
     public function destroy(Spedizione $spedizione)
     {
-        //
+        $spedizione->delete();
+    
+        return redirect()->route('spediziones.index')
+                        ->with('success','Product deleted successfully');
     }
+    public function lastnum(Spedizione $spedizione)
+    {
+      //Spedizione::all()->last->id();
+
+        return view('spediziones.index',compact('data'));
+    }
+
+   
+    
+  
 }

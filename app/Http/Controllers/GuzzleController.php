@@ -10,14 +10,19 @@ class GuzzleController extends Controller
     {
         $client = new \GuzzleHttp\Client(['verify' => false]);
 
-        $response = $client->request('POST', 'http://localhost:8000/store', [
+        $response = $client->request('POST', 'http://localhost:8000/post', [
             'form_params' => [
                 'title' => 'Post 1',
             ]
         ]);
-        $response = $response->getBody()->getContents();
-        echo '<pre>';
-        print_r($response);
+        $shimpent_data = $response->getBody()->getContents();
+        $shimpent_data = json_decode($shimpent_data);
+        $shipment = $shimpent_data;
+        //BtrHelpers::getShipment($shipment);
+        
+        //$shipment =  BtrHelpers::ShipmentPDF($shimpent_data);
+        
+        dd($shimpent_data);
     }
 
     public function getRequest()

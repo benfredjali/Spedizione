@@ -10,7 +10,6 @@ class Spedizione extends Model
     use HasFactory;
     protected $fillable = [
     
-        'senderCustomerCode',
         'numericSenderReference',
         'alphanumericSenderReference',
         'parcelID',

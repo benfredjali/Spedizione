@@ -3,11 +3,11 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
+            <div class="pull-left" style="margin-left: 100px ;margin-top:30px;">
                 <h2>add new BRT shipment with web service </h2>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-success" href="{{ url('/addShipment') }}"> Create New Shipment</a>
+            <div class="pull-right" style="margin-left: 900px ;margin-top:50px; margin-bottom: 10px">
+                <a class="btn btn-success" href="{{ url('/store') }}"> Create New Shipment</a>
             </div>
         </div>
     </div>
@@ -35,23 +35,26 @@
             <td>{{ $spedizione->alphanumericSenderReference }}</td>
             <td>{{ $spedizione->etichetta }}</td>
             <td>
-                <form action="{{ route('spediziones.destroy') }}" method="POST"  enctype="multipart/form-data">
+                <form action="{{ route('spediziones.destroy',$spedizione->id) }}" method="POST"  enctype="multipart/form-data">
    
                     @csrf
-                    <button type="submit" class="btn btn-primary">New</button>
+                    <a class="btn btn-primary" href="{{url($spedizione->etichetta)}}" download="{{$spedizione->etichetta}}">downlod</a>
+                   
 
-                </form>
-                <form>
-                    <a class="btn btn-primary" href="{{ route('spediziones.edit',$spedizione->id) }}">Trackng</a>
-   
+                    <a class="btn btn-primary"  href="{{url('getShipment/'.$spedizione->parcelID)}}">Trackng</a>
+                   <!-- <a  class="btn btn-primary" id={{$spedizione->parcelID}}  onclick="myFunction(this.id)">Trackng</a>-->
+
                     @csrf
                     @method('DELETE')
       
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger" href="{{url('delete/'.$spedizione->numericSenderReference.'/'.$spedizione->alphanumericSenderReference)}}" >Delete</button>
+
                 </form>
             </td>
         </tr>
         @endforeach
+
+       
     </table>
   
     

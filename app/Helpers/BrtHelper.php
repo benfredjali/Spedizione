@@ -4,9 +4,8 @@
     use App\Models\Spedizione;
     use App\Models\User;
     use Barryvdh\DomPDF\PDF;
+    use App\Http\Controllers\SpedizioneController;
     use Illuminate\Support\Facades\Storage;
-    //use Illuminate\Support\Facades\Storage;
-    //use Barryvdh\DomPDF\Facade as PDF;
 
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Http\Request;
@@ -23,13 +22,23 @@
 
 class BtrHelper
 {
-    
+        private static $Filename;
+       // Mon Constructeur
+        public static function getFilename()
+        {
+        return self::$Filename;
+        }
+        public static function setFilename($newFilename)
+        {
+        return self::$Filename = $newFilename;
+        }
      public static function addShipment()
     {
         // Create a client with curl request
         $client = new \GuzzleHttp\Client(['verify' => false]);
           //BrtHelper = new BtrHelper();
-
+          $numeric = BtrHelpers::datasender();
+          //dd($numeric);
         // Create a POST request with i dati
         $response = $client->request('POST', 'https://api.brt.it/rest/v1/shipments/shipment', [
             \GuzzleHttp\RequestOptions::JSON => [
@@ -92,7 +101,7 @@ class BtrHelper
                         "packingListPDFName" =>  "",
                         "packingListPDFFlagPrint" =>  "",
                         "packingListPDFFlagEmail" =>  "",
-                        "numericSenderReference" =>  51,
+                        "numericSenderReference" =>  $numeric,
                         "alphanumericSenderReference" =>  "aaa2",
                         "numberOfParcels" => 1,
                         "weightKG" =>  81.0,
@@ -117,39 +126,49 @@ class BtrHelper
             ]
           
         ]);
-   
             $shimpent_data = $response->getBody()->getContents();
             $shimpent_data = json_decode($shimpent_data);
             $shipment = $shimpent_data;
             //BtrHelpers::getShipment($shipment);
             
-            //$shipment =  BtrHelpers::ShipmentPDF($shimpent_data);
-            
-            dd($shimpent_data);
+           
+            BtrHelpers::ShipmentPDF( $shipment);
+            return  $shipment;
+             
 
  }
 
-   public static function ShipmentPDF($shipment)
-    {
-            //$shipment = BrtHelper::addShipping($shipment);
-            $pdfMerger = PDFMerger::init();
-            $single_files = [];
-            //dd($shipment);
-            foreach($shipment->createResponse->labels as $key => $label){
-            foreach($label as $labelstream){
-            $label = base64_decode($labelstream->stream);
-    }
-            $temp = public_path("app/tmp/".$key.time().".pdf");
-            file_put_contents($temp,$label);
+
+    public static function datasender(){
+            $data =DB::table('spediziones')->latest('id')->first();
+            $numeric= $data->numericSenderReference;
+            return ++$numeric;
+ }
+
+     public static function ShipmentPDF($shipment)
+    {            
+              //$shipment = BrtHelper::addShipping($shipment);
+              $pdfMerger = PDFMerger::init();
+              $single_files = [];
+              //dd($shipment);
+              foreach($shipment->createResponse->labels as $key => $label){
+              foreach($label as $labelstream){
+              $label = base64_decode($labelstream->stream);
+      }
+            $Filename = $key.time().".pdf";
+            BtrHelper::setFilename($Filename);
+            $temp = public_path($Filename);
+           // Storage::put($temp, $file);
+            //save labels list to allow deletion after merging
             $single_files[] = $temp;
-            $pdfMerger->addPDF($temp, 'all'); 
-            //merge single files
+            file_put_contents($temp,$label);
+            $pdfMerger->addPDF($temp, 'all');
+              //merge single files
             $pdfMerger->merge(); 
-            //remove single files
-            foreach($single_files as $file) unlink($file);        
-            return $pdfMerger->save('Etichetta_ordine_.pdf','download');
- 
-    
+              //remove single files
+            //foreach($single_files as $file) unlink($file);        
+            $pdfMerger->save('Etichetta_ordine_.pdf','download');
+           
     }
 
 
@@ -174,11 +193,15 @@ class BtrHelper
         $shimpent_data = $response->getBody()->getContents();
             //dd ($shiment_data);
 
-        dd(json_decode($shimpent_data));
+        $spediziones = (json_decode($shimpent_data));
+       
+            
+       
+        //dd($spediziones);
+        return view('spediziones.show',compact('spediziones'));
     }
 
-
-    
+  
     public static function DeleteShipment($numeric, $alphanumeric)
     {
         
@@ -200,7 +223,7 @@ class BtrHelper
             ]);
 
             $shimpent_data = $response->getBody()->getContents();
-
+           //return alert("Shipmet deleted succefuly");
             dd(json_decode($shimpent_data));
 
 
