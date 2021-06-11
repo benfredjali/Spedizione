@@ -24,8 +24,8 @@ class YukatelHelper{
 
         $response = $response->getBody()->getContents();
             //dd ($shiment_data);
-        $response = (json_decode($response));
-        dd($response);
+        $stock = (json_decode($response));
+         return$stock;
       
     }
     public static function getOrders()

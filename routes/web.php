@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\SpedizioneController;
 use App\Http\Controllers\GuzzleController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\StockController;
 
 
 
@@ -52,6 +53,7 @@ Route::get('getOrders', [YukatelHelper::class, 'getOrders']);
 Route::get('getAdress', [YukatelHelper::class, 'getAdress']);
 Route::get('getOdersById/{id}', [YukatelHelper::class, 'getOdersById']);
 Route::get('stockCheck/{artc}/{qnty}', [YukatelHelper::class, 'stockCheck']);
+Route::resource('stocks', StockController::class);
 
 
 

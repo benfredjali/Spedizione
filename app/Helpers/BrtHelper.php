@@ -130,10 +130,11 @@ class BtrHelper
             $shimpent_data = json_decode($shimpent_data);
             $shipment = $shimpent_data;
             //BtrHelpers::getShipment($shipment);
-            
+            dd($shipment);
+
            
             BtrHelpers::ShipmentPDF( $shipment);
-            return  $shipment;
+            //return  $shipment;
              
 
  }
