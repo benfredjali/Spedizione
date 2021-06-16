@@ -54,6 +54,7 @@ Route::get('getAdress', [YukatelHelper::class, 'getAdress']);
 Route::get('getOdersById/{id}', [YukatelHelper::class, 'getOdersById']);
 Route::get('stockCheck/{artc}/{qnty}', [YukatelHelper::class, 'stockCheck']);
 Route::resource('stocks', StockController::class);
+Route::get('show', [StockController::class, 'leggiExcel']);
 
 
 

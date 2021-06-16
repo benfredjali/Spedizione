@@ -1,4 +1,4 @@
-@extends('spediziones.layout')
+@extends('articles.layout')
  
 @section('content')
 <div class="row">
@@ -21,30 +21,26 @@
     <table class="table table-bordered">
         <tr>
             <th>#</th>
-
             <th>ArticleNo</th>
             <th>Description</th>
             <th>Stock</th>
-            <th>SellingPrice</th>         
-            <th >Ean</th>
-            <th >Category</th>
+            <th>SellingPrice</th>
+            <th>YukaPoints</th>
+            <th >manufacturer</th>
         </tr>
-        
-        @foreach ($stocks->Articles as $key => $values) 
-
+        @foreach ($ean->Articles as $key => $value) 
         <tr>
             <td>{{ $key}}</td>
-
-            <td>{{ $values->articelno}}</td>
-            <td>{{ $values->description }}</td>
-            <td>{{ $values->quantity }}</td>
-            <td>{{ $values->sellingprice }}</td>
-            <td>{{ isset($values->ean) ? $values->ean : '' }}</td>
-            <td>{{ isset($values->category) ? $values->category : '' }}</td>
-
+            <td>{{ $value->articelno}}</td>
+            <td>{{ $value->description }}</td>
+            <td>{{ $value->quantity }}</td>
+            <td>{{ $value->sellingprice }}</td>
+            <td>{{ $value->yukapoints }}</td>
+            <td>{{ $value->manufacturer }}</td>
 
         </tr>
         @endforeach
+
     </table>
   
     

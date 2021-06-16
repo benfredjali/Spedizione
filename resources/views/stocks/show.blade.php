@@ -1,81 +1,47 @@
 @extends('spediziones.layout')
-  
-@section('content')
-
-<div class="cardshow" style="margin-top: 20px;">
-    <div class="card">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2> Show Datail Shipment:</h2>
-            </div>
-            
-        </div>
  
+@section('content')
+<div class="row">
+    <div class="col-lg-12 margin-tb">
+        <div class="pull-left" style="margin-left: 100px ;margin-top:30px;">
+            <h2>Yukatel Stock with web service </h2>
+        </div>
+        <div class="pull-right" style="margin-left: 900px ;margin-top:50px; margin-bottom: 10px">
+            <a class="btn btn-success" href="{{ url('/store') }}"> Create New Stock</a>
+        </div>
+    </div>
+</div>
    
-    <div class="row1">
-        
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Numero Serie:</strong>
-                {{ $spediziones->ttParcelIdResponse->currentTimeUTC }}
-            </div>
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
         </div>
-      
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>esito:</strong>
-                {{ $spediziones->ttParcelIdResponse->esito }}
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>isposta_timestamp:</strong>
-                {{ $spediziones->ttParcelIdResponse->risposta_timestamp }}
-            </div>
-        </div>
-      
-        
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-        <div class="pull-center">
-            <a class="btn btn-primary" href="{{ route('spediziones.index') }}"> Back</a>
-        </div>
-        </div>
-    </div>
-    </div>
-</div>
-</div>
+    @endif
+   
+    <table class="table table-bordered">
+        <tr>
 
+            <th>#</th>
+            <th>ean</th>
+            <th>Category</th>
 
+        </tr>
+        @foreach ($eans as $key =>$ean) 
+       
+
+        <tr>
+            <td>{{ $key}}</td>
+
+            <td>{{ $ean}}</td>
+            <td>{{ $category[$key]}}</td>
+
+          
+
+        </tr>
+        @endforeach
+
+    </table>
+  
+    
+      
 @endsection
-
-{{-- @extends('products.layout')
-  
-@section('content')
-    <div class="card">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2> Show Product</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('products.index') }}"> Back</a>
-            </div>
-        </div>
- 
-   
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Name:</strong>
-                {{ $product->name }}
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Details:</strong>
-                {{ $product->detail }}
-            </div>
-        </div>
-    </div>
-</div>
-@endsection --}}
